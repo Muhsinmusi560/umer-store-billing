@@ -6,7 +6,7 @@
 <title>M Ummerkutty Store — Billing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=IBM+Plex+Mono:wght@500;600;700&family=Noto+Sans+Malayalam:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#20241f;
@@ -28,10 +28,10 @@
   body{
     background:var(--paper);
     color:var(--ink);
-    font-family:'Manrope',sans-serif;
+    font-family:'Manrope','Noto Sans Malayalam',sans-serif;
     -webkit-font-smoothing:antialiased;
   }
-  .mono{font-family:'IBM Plex Mono',monospace;}
+  .mono{font-family:'IBM Plex Mono','Noto Sans Malayalam',monospace;}
   button{font-family:inherit;cursor:pointer;color:var(--ink);background:var(--white);}
   input,select,textarea{
     font-family:inherit;color:var(--ink);background:var(--white);
@@ -183,7 +183,7 @@
   .btn-whatsapp:hover{background:#1FBE59;}
 
   /* ---------- Products (admin) tab ---------- */
-  .prod-form{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:8px;align-items:end;margin-bottom:18px;}
+  .prod-form{display:grid;grid-template-columns:2fr 2fr 1fr 1fr 1fr auto;gap:8px;align-items:end;margin-bottom:18px;}
   .prod-form .field label{display:block;font-size:11px;color:var(--muted);margin-bottom:3px;text-transform:uppercase;}
   .prod-form input,.prod-form select{
     width:100%;padding:8px 9px;border:1.5px solid var(--line);border-radius:7px;font-size:13.5px;
@@ -194,48 +194,117 @@
   table.prod-table input{width:100%;padding:5px 7px;border:1px solid var(--line);border-radius:5px;font-family:'IBM Plex Mono',monospace;}
   .row-del{background:none;border:none;color:var(--brick);font-weight:700;}
   .shop-settings{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);}
-  .shop-settings .prod-form{grid-template-columns:1fr 1fr 1fr;}
+  .shop-settings .prod-form{grid-template-columns:1fr 1fr;margin-bottom:12px;}
 
   /* ---------- Print receipt ---------- */
-  #receipt{display:none;}
+  #receipt{display:none;font-family:'IBM Plex Mono','Noto Sans Malayalam',monospace;color:#000;background:#fff;}
   @media print{
     body *{visibility:hidden;}
     #receipt, #receipt *{visibility:visible;}
-    #receipt{
-      display:block;position:absolute;top:0;left:0;width:100%;
-      font-family:'IBM Plex Mono',monospace;padding:0 8px;
-    }
+    #receipt{display:block;position:absolute;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:100mm;padding:0 6px;}
     @page{margin:8mm;}
   }
-  #receipt .r-head{text-align:center;margin-bottom:10px;}
-  #receipt .r-head .r-shop{font-size:18px;font-weight:700;}
-  #receipt .r-head .r-sub{font-size:11px;}
+  #receipt .r-head{text-align:center;margin-bottom:8px;}
+  #receipt .r-shop{font-size:19px;font-weight:700;letter-spacing:1px;}
+  #receipt .r-sub{font-size:11px;margin-top:2px;}
   #receipt hr{border:none;border-top:1px dashed #000;margin:8px 0;}
-  #receipt .r-meta{display:flex;justify-content:space-between;font-size:11px;}
-  #receipt table{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px;}
-  #receipt th{text-align:left;font-size:10.5px;border-bottom:1px solid #000;padding:3px 2px;}
-  #receipt td{padding:3px 2px;}
-  #receipt td.amt,#receipt th.amt{text-align:right;}
-  #receipt .r-total{display:flex;justify-content:space-between;font-size:15px;font-weight:700;margin-top:8px;}
-  #receipt .r-foot{text-align:center;font-size:11px;margin-top:14px;}
-
+  #receipt .r-meta{display:flex;justify-content:space-between;gap:8px;font-size:11px;}
+  #receipt .r-item{margin:6px 0;page-break-inside:avoid;}
+  #receipt .r-line{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;}
+  #receipt .r-qty{font-size:11px;padding-left:8px;color:#333;}
+  #receipt .r-row{display:flex;justify-content:space-between;font-size:12px;margin-top:3px;}
+  #receipt .r-total{display:flex;justify-content:space-between;font-size:16px;font-weight:700;margin-top:6px;}
+  #receipt .r-foot{text-align:center;font-size:11px;margin-top:12px;line-height:1.5;}
+  #storageWarn{display:none;background:#FDECE8;border:1.5px solid var(--brick);color:#7a2615;border-radius:8px;padding:9px 12px;font-size:13px;margin-bottom:12px;}
+  .tbl-wrap{overflow-x:auto;}
+  .wa-row label{display:block;font-size:11px;color:var(--muted);margin-bottom:3px;text-transform:uppercase;}
+  .pml{font-weight:600;}
+  .toast.err{background:var(--brick);}
+  @media(max-width:700px){
+    .prod-form,.shop-settings .prod-form{grid-template-columns:1fr 1fr;}
+    .prod-form .btn{grid-column:1/-1;}
+    .tbl-wrap{overflow-x:visible;}
+    table.prod-table,table.prod-table tbody,table.prod-table tr,table.prod-table td{display:block;width:100%;}
+    table.prod-table thead{display:none;}
+    table.prod-table tr{border:1.5px solid var(--line);border-radius:10px;padding:10px;margin-bottom:10px;background:var(--white);}
+    table.prod-table td{border:0;padding:4px 0;display:flex;align-items:center;gap:10px;}
+    table.prod-table td::before{content:attr(data-label);flex:0 0 84px;font-size:11px;text-transform:uppercase;color:var(--muted);}
+    table.prod-table td input{min-height:42px;font-size:16px;}
+    table.prod-table .row-del{min-height:42px;width:100%;}
+    nav.tabs button{flex:1;padding:8px 10px;}
+    .product-grid{max-height:340px;}
+  }
   .toast{
     position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
     background:var(--ink);color:var(--white);padding:10px 18px;border-radius:8px;
     font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s, transform .2s;z-index:50;
   }
   .toast.show{opacity:1;transform:translateX(-50%) translateY(-6px);}
+
+  /* ---------- Ease-of-use polish ---------- */
+  ::selection{background:var(--mustard);color:var(--ink);}
+  :focus-visible{outline:3px solid var(--mustard);outline-offset:2px;border-radius:6px;}
+  input,button,select{font-variant-numeric:tabular-nums;}
+  *{scrollbar-width:thin;scrollbar-color:var(--line) transparent;}
+  .btn{min-height:48px;font-size:15px;}
+  .btn-small{min-height:40px;}
+  .cat-tabs{flex-wrap:wrap;}
+  .cat-tabs button{min-height:40px;padding:8px 14px;}
+  .hint{margin:0 0 10px;font-size:13px;color:var(--muted);}
+  .product-card{display:flex;flex-direction:column;gap:4px;min-height:76px;justify-content:center;}
+  .product-card .pic{width:40px;height:40px;border-radius:10px;padding:8px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+  .c-veg .pic{background:#E3EEDC;color:#1F4D36;} .c-fruit .pic{background:#F8E1D9;color:#933220;}
+  .c-groc .pic{background:#F3E6BF;color:#6e5200;} .c-bak .pic{background:#EBDCC8;color:#7a4a1c;}
+  .c-stat .pic{background:#DCE6EF;color:#274f78;}
+  .ico{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;vertical-align:-4px;margin-right:6px;}
+  #cartEmpty{text-align:center;color:var(--muted);padding:22px 8px;}
+  #cartEmpty .ico-big{width:46px;height:46px;stroke:var(--green-2);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-bottom:8px;}
+  #cartEmpty ol{text-align:left;display:inline-block;margin:10px 0 0;padding-left:20px;font-size:14px;line-height:1.7;color:var(--ink);}
+  .chips{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .chips button{flex:1;min-width:56px;min-height:44px;border:1.5px solid var(--green-2);border-radius:8px;background:var(--white);font-weight:700;color:var(--green);}
+  .chips button:active{background:var(--green);color:var(--white);}
+  #grandTotalVal{font-size:30px;}
+  #miniBar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--green);color:var(--white);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));align-items:center;justify-content:space-between;gap:10px;box-shadow:0 -4px 14px rgba(32,36,31,.2);}
+  #miniBar b{font-family:'IBM Plex Mono',monospace;font-size:20px;}
+  #miniBar button{min-height:44px;border:0;border-radius:8px;background:var(--mustard);font-weight:800;padding:0 16px;}
+  @media(max-width:700px){#miniBar.on{display:flex;} #app{padding-bottom:84px;}}
+  @media print{#miniBar{display:none !important;}}
+  @media(prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important;}}
+  .chips button.active{background:var(--green);color:var(--white);}
+  .hist-item{border:1.5px solid var(--line);border-radius:10px;margin-bottom:10px;background:var(--white);}
+  .hist-item summary{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;min-height:56px;cursor:pointer;list-style:none;}
+  .hist-item summary::-webkit-details-marker{display:none;}
+  .hist-item summary small{display:block;font-size:12px;color:var(--muted);font-weight:500;margin-top:2px;}
+  .hist-item summary b{font-family:'IBM Plex Mono',monospace;color:var(--green);font-size:17px;}
+  .hist-body{padding:0 12px 12px;border-top:1px dashed var(--line);}
+  .r-line2{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--paper-2);font-size:14px;}
+  .r-line2 small{display:block;font-size:12px;color:var(--muted);}
+  .hist-via{font-size:12px;color:var(--muted);margin:8px 0;}
+  .hist-actions{display:flex;gap:8px;}.hist-actions .btn{flex:1;}
+  .hist-empty{text-align:center;color:var(--muted);padding:26px 8px;}
 </style>
 </head>
 <body>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-veg" viewBox="0 0 24 24"><path d="M14 6c3 0 5 2 5 2s-2 8-9 12C6 21 3 20 4 17c3-6 6-9 10-11z"/><path d="M15 3l1 3M18 5l-3 2"/></symbol>
+<symbol id="i-fruit" viewBox="0 0 24 24"><path d="M12 7c-3-2-7 0-7 5 0 4 3 8 5 8 1 0 1.5-.5 2-.5s1 .5 2 .5c2 0 5-4 5-8 0-5-4-7-7-5z"/><path d="M12 7c0-2 1-3 3-4"/></symbol>
+<symbol id="i-groc" viewBox="0 0 24 24"><path d="M7 8h10l1 12H6z"/><path d="M9 8c0-2 1-3 3-3s3 1 3 3M9 13h6"/></symbol>
+<symbol id="i-bak" viewBox="0 0 24 24"><path d="M5 11c0-3 3-5 7-5s7 2 7 5c0 1-1 2-2 2v6H7v-6c-1 0-2-1-2-2z"/></symbol>
+<symbol id="i-stat" viewBox="0 0 24 24"><path d="M4 20l1-5L16 4l4 4L9 19z"/><path d="M14 6l4 4"/></symbol>
+<symbol id="i-print" viewBox="0 0 24 24"><path d="M7 9V4h10v5M7 17H5v-6h14v6h-2M7 14h10v6H7z"/></symbol>
+<symbol id="i-share" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="M8.2 10.8l6.6-3.6M8.2 13.2l6.6 3.6"/></symbol>
+<symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 016 0v2"/></symbol>
+</defs></svg>
+<div id="miniBar"><span><span id="miniCount"></span><br><b id="miniTotal"></b></span><button type="button" id="miniGo">View bill</button></div>
 <div id="app">
+  <div id="storageWarn">This browser is blocking saved data, so changes will be lost on refresh. Open the website normally in Chrome, Edge or Safari (not private mode) to keep prices and settings.</div>
   <header class="topbar">
     <div class="brand">
-      <div class="mark">MU</div>
+      <div class="mark" id="brandMark">US</div>
       <div>
-        <h1 id="shopNameDisplay">M Ummerkutty Store</h1>
-        <p id="shopSubDisplay">Fruits · Vegetables · Bakery · Groceries · Stationery</p>
+        <h1 id="shopNameDisplay">Umar Store</h1>
+        <p id="shopSubDisplay"></p>
       </div>
     </div>
     <div class="topbar-right">
@@ -246,6 +315,7 @@
   <nav class="tabs">
     <button data-view="billing" class="active">Billing</button>
     <button data-view="products">Products &amp; Rates</button>
+    <button data-view="history">Bill History</button>
   </nav>
 
   <!-- ============ BILLING VIEW ============ -->
@@ -262,6 +332,7 @@
           <h3>New Product</h3>
           <div class="qa-row">
             <div class="qa-field"><label>Name</label><input id="qaName" placeholder="e.g. Cucumber"></div>
+            <div class="qa-field"><label>Malayalam name</label><input id="qaMl" placeholder="e.g. വെള്ളരിക്ക"></div>
             <div class="qa-field"><label>Category</label>
               <select id="qaCategory">
                 <option>Fruits</option>
@@ -291,13 +362,14 @@
         <div class="cat-tabs" id="catTabs"></div>
         <div class="product-grid" id="productGrid"></div>
 
+        <p class="hint">Tap an item, enter weight or amount, then Add to Bill.</p>
         <div id="entryPanel" style="display:none;"></div>
       </div>
 
       <div class="panel">
         <h2>Current Bill</h2>
         <ul id="cartList"></ul>
-        <div id="cartEmpty">No items added yet. Tap a product to start billing.</div>
+        <div id="cartEmpty"><svg class="ico-big" viewBox="0 0 24 24"><use href="#i-bag"/></svg><br><b>Your bill is empty</b><br><ol><li>Tap an item above</li><li>Enter weight or price</li><li>Print or send on WhatsApp</li></ol></div>
 
         <div class="totals">
           <div class="row"><span>Subtotal</span><span id="subtotalVal" class="mono">₹0.00</span></div>
@@ -306,14 +378,15 @@
         </div>
 
         <div class="wa-row">
-          <input id="waPhone" type="tel" placeholder="Customer WhatsApp no. (used only on desktop)">
+          <label for="waPhone">WhatsApp / phone number (saved)</label>
+          <input id="waPhone" type="tel" inputmode="tel" placeholder="e.g. 98765 43210">
         </div>
         <div class="cart-actions">
           <button class="btn btn-ghost" id="clearCartBtn">Clear</button>
-          <button class="btn btn-primary" id="printBtn">🖨 Print Bill</button>
+          <button class="btn btn-primary" id="printBtn"><svg class="ico" viewBox="0 0 24 24"><use href="#i-print"/></svg>Print Bill</button>
         </div>
         <div class="cart-actions">
-          <button class="btn btn-whatsapp btn-block" id="waShareBtn">📤 Share Bill Image on WhatsApp</button>
+          <button class="btn btn-whatsapp btn-block" id="waShareBtn"><svg class="ico" viewBox="0 0 24 24"><use href="#i-share"/></svg>Send Bill on WhatsApp</button>
         </div>
       </div>
 
@@ -321,11 +394,21 @@
   </section>
 
   <!-- ============ PRODUCTS / ADMIN VIEW ============ -->
+  <section id="view-history" class="view">
+    <div class="panel">
+      <h2>Bill History</h2>
+      <div class="chips" id="histFilter"><button type="button" data-f="today">Today</button><button type="button" data-f="all">All bills</button></div>
+      <p id="histSummary" class="hint"></p>
+      <div id="histList"></div>
+    </div>
+  </section>
+
   <section id="view-products" class="view">
     <div class="panel">
       <h2>Add a Product</h2>
       <div class="prod-form">
         <div class="field"><label>Name</label><input id="newName" placeholder="e.g. Tomato"></div>
+        <div class="field"><label>Malayalam name</label><input id="newMl" placeholder="e.g. തക്കാളി"></div>
         <div class="field"><label>Type</label>
           <select id="newType">
             <option value="weight">Weight (₹/kg)</option>
@@ -346,19 +429,20 @@
       </div>
 
       <h2>Product List — edit rates anytime (e.g. daily veg/fruit prices)</h2>
-      <table class="prod-table">
+      <div class="tbl-wrap"><table class="prod-table">
         <thead>
-          <tr><th>Name</th><th>Category</th><th>Type</th><th>Price / Rate (₹)</th><th></th></tr>
+          <tr><th>Name</th><th>Malayalam</th><th>Category</th><th>Unit</th><th>Price / Rate (₹)</th><th>Stock</th><th></th></tr>
         </thead>
         <tbody id="prodTableBody"></tbody>
-      </table>
+      </table></div>
 
       <div class="shop-settings">
         <h2>Shop Details (shown on printed bill)</h2>
         <div class="prod-form">
           <div class="field"><label>Shop Name</label><input id="setShopName"></div>
+          <div class="field"><label>Tagline (under shop name)</label><input id="setShopTag"></div>
           <div class="field"><label>Address</label><input id="setShopAddr"></div>
-          <div class="field"><label>Phone</label><input id="setShopPhone"></div>
+          <div class="field"><label>Owner phone / WhatsApp</label><input id="setShopPhone" type="tel" inputmode="tel"></div>
         </div>
         <button class="btn btn-ghost" id="saveShopBtn">Save Shop Details</button>
       </div>
@@ -367,28 +451,7 @@
 </div>
 
 <!-- Printable receipt (hidden on screen, shown only on print) -->
-<div id="receipt">
-  <div class="r-head">
-    <div class="r-shop" id="rShopName"></div>
-    <div class="r-sub" id="rShopAddr"></div>
-    <div class="r-sub" id="rShopPhone"></div>
-  </div>
-  <hr>
-  <div class="r-meta">
-    <span id="rBillNo"></span>
-    <span id="rDateTime"></span>
-  </div>
-  <hr>
-  <table>
-    <thead><tr><th>Item</th><th class="amt">Qty</th><th class="amt">Rate</th><th class="amt">Amt</th></tr></thead>
-    <tbody id="rItems"></tbody>
-  </table>
-  <hr>
-  <div class="r-total"><span>Subtotal</span><span id="rSubtotal"></span></div>
-  <div class="r-total" id="rDiscountRow" style="font-size:12px;font-weight:400;"><span>Discount</span><span id="rDiscount"></span></div>
-  <div class="r-total"><span>TOTAL</span><span id="rGrandTotal"></span></div>
-  <div class="r-foot">Thank you, visit again!</div>
-</div>
+<div id="receipt"></div>
 
 <div class="toast" id="toast"></div>
 
@@ -397,6 +460,8 @@
 const LS_PRODUCTS = 'muk_products_v1';
 const LS_SHOP = 'muk_shopinfo_v1';
 const LS_BILLNO = 'muk_billno_v1';
+const LS_SCHEMA = 'muk_schema';
+const DEFAULT_TAGLINE = 'Fruits • Vegetables • Groceries • Stationery & General Items';
 
 const defaultProducts = [
   // Vegetables
@@ -463,27 +528,83 @@ const defaultProducts = [
   {id:'p57', name:'Gum Bottle', category:'Stationery', type:'unit', price:20},
 ];
 
-function loadProducts(){
-  const raw = localStorage.getItem(LS_PRODUCTS);
-  if(raw) return JSON.parse(raw);
-  localStorage.setItem(LS_PRODUCTS, JSON.stringify(defaultProducts));
-  return defaultProducts.slice();
+// Common Kerala names (used for first install and to fill existing products that have no Malayalam name yet)
+const ML = {'tomato':'തക്കാളി','onion':'ഉള്ളി','potato':'ഉരുളക്കിഴങ്ങ്','carrot':'കാരറ്റ്','beans':'ബീൻസ്','cabbage':'കാബേജ്','cauliflower':'കോളിഫ്ലവർ','brinjal':'വഴുതനങ്ങ','cucumber':'വെള്ളരിക്ക','ladies finger':'വെണ്ടയ്ക്ക','green chilli':'പച്ചമുളക്','ginger':'ഇഞ്ചി','garlic':'വെളുത്തുള്ളി','beetroot':'ബീറ്റ്റൂട്ട്','pumpkin':'മത്തങ്ങ','drumstick':'മുരിങ്ങക്കായ','curry leaves':'കറിവേപ്പില','coriander leaves':'മല്ലിയില','banana':'വാഴപ്പഴം','apple':'ആപ്പിൾ','orange':'ഓറഞ്ച്','grapes':'മുന്തിരി','watermelon':'തണ്ണിമത്തൻ','pineapple':'കൈതച്ചക്ക','papaya':'പപ്പായ','mango':'മാങ്ങ','pomegranate':'മാതളനാരങ്ങ','guava':'പേരയ്ക്ക','sapota (chikoo)':'ചിക്കു','rice (matta)':'മട്ട അരി','rice':'അരി','sugar':'പഞ്ചസാര','toor dal':'തുവര പരിപ്പ്','moong dal':'ചെറുപയർ പരിപ്പ്','chana dal':'കടലപ്പരിപ്പ്','wheat flour (atta)':'ഗോതമ്പ് പൊടി','rava / sooji':'റവ','salt':'ഉപ്പ്','tea powder':'ചായപ്പൊടി','coffee powder':'കാപ്പിപ്പൊടി','coconut oil':'വെളിച്ചെണ്ണ','sunflower oil':'സൺഫ്ലവർ ഓയിൽ','red chilli powder':'മുളകുപൊടി','turmeric powder':'മഞ്ഞൾപ്പൊടി','coriander powder':'മല്ലിപ്പൊടി','poha (beaten rice)':'അവൽ','jaggery':'ശർക്കര','coconut':'തേങ്ങ','bread loaf':'ബ്രെഡ്','rusk pack':'റസ്ക്','bun':'ബൺ','cake slice':'കേക്ക്','biscuit pack':'ബിസ്കറ്റ്','notebook 100pg':'നോട്ട്ബുക്ക്','ball pen':'പേന','pencil':'പെൻസിൽ','eraser':'റബ്ബർ','a4 paper pack':'എ4 പേപ്പർ','gum bottle':'പശ'};
+
+let storageOK = true;
+function showStorageWarn(){ storageOK = false; const w=document.getElementById('storageWarn'); if(w) w.style.display='block'; }
+function lsGet(k){
+  try{
+    const r = localStorage.getItem(k);
+    if(r===null) return null;
+    try{ return JSON.parse(r); }
+    catch(e){ try{ localStorage.setItem(k+'_corrupt_backup', r); }catch(_){} return null; } // never lose unreadable data silently
+  }catch(e){ showStorageWarn(); return null; }
 }
-function saveProducts(list){ localStorage.setItem(LS_PRODUCTS, JSON.stringify(list)); }
+function lsSet(k,v){
+  try{ localStorage.setItem(k, JSON.stringify(v)); return true; }
+  catch(e){ showStorageWarn(); return false; }
+}
+try{ localStorage.setItem('muk_test','1'); localStorage.removeItem('muk_test'); }catch(e){ showStorageWarn(); }
+try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
+
+function loadProducts(){
+  let list = lsGet(LS_PRODUCTS);
+  let changed = false;
+  if(!Array.isArray(list)){ list = JSON.parse(JSON.stringify(defaultProducts)); changed = true; }
+  // migration: add Malayalam name where missing (never overwrites a saved one)
+  list.forEach(p=>{ if(p.ml===undefined){ p.ml = ML[String(p.name).trim().toLowerCase()] || ''; changed = true; } });
+  // one-time: add Coconut if the shop doesn't have it
+  if(lsGet(LS_SCHEMA)!==2){
+    if(!list.some(p=>String(p.name).trim().toLowerCase()==='coconut')){
+      list.push({id:'p58', name:'Coconut', ml:'തേങ്ങ', category:'Groceries', type:'unit', price:45});
+    }
+    lsSet(LS_SCHEMA, 2); changed = true;
+  }
+  if(changed) lsSet(LS_PRODUCTS, list);
+  return list;
+}
+function saveProducts(list){ lsSet(LS_PRODUCTS, list); }
 
 function loadShop(){
-  const raw = localStorage.getItem(LS_SHOP);
-  if(raw) return JSON.parse(raw);
-  const def = {name:'M Ummerkutty Store', addr:'Kannur, Kerala', phone:''};
-  localStorage.setItem(LS_SHOP, JSON.stringify(def));
-  return def;
+  const def = {name:'Umar Store', tagline:DEFAULT_TAGLINE, addr:'Station Road, Valapattanam, Kannur', phone:''};
+  const saved = lsGet(LS_SHOP);
+  const out = Object.assign({}, def, saved || {});
+  if(!out.tagline) out.tagline = DEFAULT_TAGLINE;
+  if(out.addr==='Kannur, Kerala'){ out.addr='Station Road, Valapattanam, Kannur'; lsSet(LS_SHOP,out); } // replace the old placeholder address only
+  if(!saved || saved.tagline===undefined) lsSet(LS_SHOP, out);
+  return out;
 }
-function saveShop(s){ localStorage.setItem(LS_SHOP, JSON.stringify(s)); }
+function saveShop(s){ lsSet(LS_SHOP, s); }
 
 function nextBillNo(){
-  let n = parseInt(localStorage.getItem(LS_BILLNO) || '0', 10) + 1;
-  localStorage.setItem(LS_BILLNO, String(n));
+  const n = (parseInt(lsGet(LS_BILLNO), 10) || 0) + 1;
+  lsSet(LS_BILLNO, n);
   return n;
+}
+
+/* ---- Phone / WhatsApp helpers ---- */
+// returns international digits (e.g. 919876543210) or null if the number looks invalid
+function waDigits(raw){
+  let d = String(raw||'').replace(/\D/g,'');
+  if(d.startsWith('00')) d = d.slice(2);
+  else if(d.length===11 && d[0]==='0') d = d.slice(1);
+  if(d.length===10){ if(!/^[6-9]/.test(d)) return null; d = '91'+d; }
+  return (d.length>=11 && d.length<=15) ? d : null;
+}
+function fmtPhone(d){ return (d.startsWith('91') && d.length===12) ? '+91 '+d.slice(2,7)+' '+d.slice(7) : '+'+d; }
+function savePhone(raw){
+  raw = String(raw||'').trim();
+  if(raw===''){ shopInfo.phone=''; }
+  else {
+    const d = waDigits(raw);
+    if(!d){ showToast('Enter a valid phone number (10 digits, or with country code)', true); return false; }
+    shopInfo.phone = fmtPhone(d);
+  }
+  saveShop(shopInfo);
+  document.getElementById('waPhone').value = shopInfo.phone;
+  document.getElementById('setShopPhone').value = shopInfo.phone;
+  return true;
 }
 
 let products = loadProducts();
@@ -500,12 +621,20 @@ function getBillNo(){
 
 /* ===================== Helpers ===================== */
 function money(n){ return '₹' + (Math.round(n*100)/100).toFixed(2); }
-function showToast(msg){
+let toastTimer;
+function showToast(msg, isErr){
   const t = document.getElementById('toast');
   t.textContent = msg;
+  t.classList.toggle('err', !!isErr);
   t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 1400);
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), isErr ? 3000 : 1400);
 }
+function catKey(c){ c=String(c||"").toLowerCase(); return c.includes("veg")?"veg":c.includes("fruit")?"fruit":c.includes("bak")?"bak":c.includes("stat")?"stat":"groc"; }
+function esc(v){ return String(v==null?'':v).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function round2(n){ return Math.round((n+Number.EPSILON)*100)/100; }
+function fmtN(n,dp){ return String(parseFloat(Number(n).toFixed(dp))); }
+function dispName(o){ return o.ml ? o.name+' ('+o.ml+')' : o.name; }
 function uid(){ return 'p' + Date.now() + Math.floor(Math.random()*1000); }
 
 /* ===================== Tabs ===================== */
@@ -517,6 +646,7 @@ document.querySelectorAll('nav.tabs button').forEach(btn=>{
     document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
     document.getElementById('view-'+target).classList.add('active');
     if(target==='products') renderProductTable();
+    if(target==='history') renderHistory();
   });
 });
 
@@ -547,7 +677,7 @@ function renderProductGrid(){
   grid.innerHTML = '';
   const list = products.filter(p=>{
     const catOk = activeCategory==='All' || p.category===activeCategory;
-    const qOk = !q || p.name.toLowerCase().includes(q);
+    const qOk = !q || (p.name+' '+(p.ml||'')).toLowerCase().includes(q);
     return catOk && qOk;
   });
   if(list.length===0){
@@ -557,8 +687,9 @@ function renderProductGrid(){
   list.forEach(p=>{
     const card = document.createElement('button');
     card.className = 'product-card';
-    card.innerHTML = `<span class="ptype">${p.category}</span>
-      <span class="pname">${p.name}</span>
+    const ck = catKey(p.category);
+    card.className = 'product-card c-'+ck;
+    card.innerHTML = `<span class="pname">${esc(dispName(p))}</span>
       <span class="prate">${p.type==='weight' ? money(p.price)+' /kg' : money(p.price)+' /unit'}</span>`;
     card.addEventListener('click', ()=>openEntry(p));
     grid.appendChild(card);
@@ -584,10 +715,12 @@ document.getElementById('qaSaveBtn').addEventListener('click', ()=>{
   const category = document.getElementById('qaCategory').value;
   const type = document.getElementById('qaType').value;
   const price = parseFloat(document.getElementById('qaPrice').value) || 0;
-  if(!name){ showToast('Enter a product name'); return; }
-  products.push({id:uid(), name, category, type, price});
+  const ml = document.getElementById('qaMl').value.trim();
+  if(!name){ showToast('Enter a product name', true); return; }
+  if(products.some(p=>p.name.toLowerCase()===name.toLowerCase())){ showToast(name+' already exists', true); return; }
+  products.push({id:uid(), name, ml, category, type, price});
   saveProducts(products);
-  document.getElementById('qaName').value='';
+  document.getElementById('qaName').value=''; document.getElementById('qaMl').value='';
   document.getElementById('qaPrice').value='';
   document.getElementById('quickAddPanel').style.display='none';
   renderCatTabs();
@@ -604,13 +737,14 @@ function openEntry(p){
 
   if(p.type === 'weight'){
     panel.innerHTML = `
-      <h3>${p.name}</h3>
+      <h3>${esc(dispName(p))}</h3>
       <div class="rate-line">Rate today: ₹<input id="liveRate" type="number" min="0" step="0.01" value="${p.price}"> /kg
         <span style="color:var(--muted);"> (editing here updates today's rate for this item)</span></div>
       <div class="unit-toggle" id="weightUnitToggle">
         <button type="button" data-unit="kg" class="active">kg</button>
         <button type="button" data-unit="g">grams</button>
       </div>
+      <div class="chips" id="wChips"><button type="button" data-kg="0.25">¼ kg</button><button type="button" data-kg="0.5">½ kg</button><button type="button" data-kg="1">1 kg</button><button type="button" data-kg="2">2 kg</button><button type="button" data-kg="5">5 kg</button></div>
       <div class="entry-row">
         <div class="entry-field"><label id="weightFieldLabel">Weight (kg)</label><input id="entryWeight" type="number" min="0" step="any" placeholder="0.000"></div>
         <div class="entry-field"><label>Price (₹)</label><input id="entryPrice" type="number" min="0" step="0.01" placeholder="0.00"></div>
@@ -620,6 +754,11 @@ function openEntry(p){
         <button class="btn btn-ghost" id="cancelEntryBtn">Cancel</button>
       </div>`;
     const wEl = document.getElementById('entryWeight');
+    document.querySelectorAll('#wChips button').forEach(b=>b.addEventListener('click',()=>{
+      const g = document.querySelector('#weightUnitToggle button.active').dataset.unit==='g';
+      wEl.value = g ? parseFloat(b.dataset.kg)*1000 : b.dataset.kg;
+      wEl.dispatchEvent(new Event('input'));
+    }));
     const pEl = document.getElementById('entryPrice');
     const rEl = document.getElementById('liveRate');
     let entryUnit = 'kg';
@@ -640,6 +779,10 @@ function openEntry(p){
     wEl.addEventListener('input', ()=>{ lastEdited='weight'; recalc(); });
     pEl.addEventListener('input', ()=>{ lastEdited='price'; recalc(); });
     rEl.addEventListener('input', recalc);
+    rEl.addEventListener('change', ()=>{ // save the new rate straight away
+      const r = parseFloat(rEl.value);
+      if(r>=0){ p.price = r; saveProducts(products); renderProductGrid(); showToast('Rate saved'); }
+    });
 
     document.querySelectorAll('#weightUnitToggle button').forEach(btn=>{
       btn.addEventListener('click', ()=>{
@@ -662,7 +805,7 @@ function openEntry(p){
       const amt = parseFloat(pEl.value) || 0;
       const kgVal = entryUnit==='g' ? w/1000 : w;
       if(w<=0 || amt<=0){ showToast('Enter weight or price first'); return; }
-      cart.push({name:p.name, type:'weight', qty:kgVal, displayQty:w, unit:entryUnit, rate:rate, amount:amt});
+      cart.push({name:p.name, ml:p.ml, type:'weight', qty:kgVal, displayQty:w, unit:entryUnit, rate:rate, amount:amt});
       // update rate on product if changed
       if(rate !== p.price){
         p.price = rate;
@@ -678,7 +821,7 @@ function openEntry(p){
 
   } else {
     panel.innerHTML = `
-      <h3>${p.name}</h3>
+      <h3>${esc(dispName(p))}</h3>
       <div class="rate-line">Unit price: <span class="mono">${money(p.price)}</span></div>
       <div class="entry-row">
         <div class="entry-field"><label>Quantity</label><input id="entryQty" type="number" min="1" step="1" value="1"></div>
@@ -692,13 +835,13 @@ function openEntry(p){
     const aEl = document.getElementById('entryUnitAmt');
     qEl.addEventListener('input', ()=>{
       const qty = parseFloat(qEl.value) || 0;
-      aEl.value = (qty * p.price).toFixed(2);
+      aEl.value = round2(qty * p.price).toFixed(2);
     });
     document.getElementById('addToCartBtn').addEventListener('click', ()=>{
       const qty = parseFloat(qEl.value) || 0;
       const amt = parseFloat(aEl.value) || 0;
       if(qty<=0){ showToast('Enter quantity first'); return; }
-      cart.push({name:p.name, type:'unit', qty:qty, unitLabel:'pcs', rate:p.price, amount:amt});
+      cart.push({name:p.name, ml:p.ml, type:'unit', qty:qty, unitLabel:'pcs', rate:p.price, amount:amt});
       closeEntry();
       renderCart();
       showToast(p.name + ' added');
@@ -724,8 +867,8 @@ function renderCart(){
     empty.style.display='none';
     cart.forEach((item, idx)=>{
       const li = document.createElement('li');
-      const qtyText = item.type==='weight' ? `${item.displayQty.toFixed(item.unit==='g'?0:3)} ${item.unit==='g'?'g':'kg'} × ${money(item.rate)}/kg` : `${item.qty} pcs × ${money(item.rate)}`;
-      li.innerHTML = `<span class="ci-name">${item.name}<span class="ci-sub">${qtyText}</span></span>
+      const qtyText = qtyLine(item);
+      li.innerHTML = `<span class="ci-name">${esc(dispName(item))}<span class="ci-sub">${esc(qtyText)}</span></span>
         <span class="ci-amt">${money(item.amount)}</span>
         <button class="ci-del" title="Remove" data-idx="${idx}">✕</button>`;
       list.appendChild(li);
@@ -741,9 +884,9 @@ function renderCart(){
 }
 
 function updateTotals(){
-  const subtotal = cart.reduce((s,i)=>s+i.amount,0);
-  const discount = parseFloat(document.getElementById('discountInput').value) || 0;
-  const grand = Math.max(subtotal - discount, 0);
+  const subtotal = round2(cart.reduce((s,i)=>s+i.amount,0));
+  const discount = Math.min(Math.max(parseFloat(document.getElementById('discountInput').value) || 0, 0), subtotal);
+  const grand = round2(subtotal - discount);
   document.getElementById('subtotalVal').textContent = money(subtotal);
   document.getElementById('grandTotalVal').textContent = money(grand);
 }
@@ -754,178 +897,151 @@ document.getElementById('clearCartBtn').addEventListener('click', ()=>{
   if(confirm('Clear the current bill?')){
     cart = [];
     document.getElementById('discountInput').value = 0;
-    document.getElementById('waPhone').value = '';
     currentBillNo = null;
     renderCart();
   }
 });
 
-/* ===================== Print ===================== */
-document.getElementById('printBtn').addEventListener('click', ()=>{
-  if(cart.length===0){ showToast('Bill is empty'); return; }
-  const subtotal = cart.reduce((s,i)=>s+i.amount,0);
-  const discount = parseFloat(document.getElementById('discountInput').value) || 0;
-  const grand = Math.max(subtotal - discount, 0);
+/* ===================== Bill (shared by print + WhatsApp image) ===================== */
+function qtyLine(i){
+  return i.type==='weight'
+    ? fmtN(i.displayQty, i.unit==='g'?0:3)+' '+(i.unit==='g'?'g':'kg')+' × ₹'+fmtN(i.rate,2)+'/kg'
+    : fmtN(i.qty,2)+' pcs × ₹'+fmtN(i.rate,2);
+}
+function buildBill(){
+  const subtotal = round2(cart.reduce((s,i)=>s+i.amount,0));
+  const discount = Math.min(Math.max(parseFloat(document.getElementById('discountInput').value)||0,0), subtotal);
+  const d = new Date();
+  return {
+    no:getBillNo(),
+    date:d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}),
+    time:d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}),
+    items:cart.map(i=>({label:dispName(i), line:qtyLine(i), amount:i.amount})),
+    subtotal, discount, grand:round2(subtotal-discount)
+  };
+}
+const thanksText = ()=>'Thank you for shopping with '+shopInfo.name+'!';
 
-  document.getElementById('rShopName').textContent = shopInfo.name;
-  document.getElementById('rShopAddr').textContent = shopInfo.addr || '';
-  document.getElementById('rShopPhone').textContent = shopInfo.phone ? 'Ph: '+shopInfo.phone : '';
-  document.getElementById('rBillNo').textContent = 'Bill #' + getBillNo();
-  document.getElementById('rDateTime').textContent = new Date().toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
-
-  const body = document.getElementById('rItems');
-  body.innerHTML = '';
-  cart.forEach(item=>{
-    const tr = document.createElement('tr');
-    const qtyText = item.type==='weight' ? item.displayQty.toFixed(item.unit==='g'?0:3)+' '+(item.unit==='g'?'g':'kg') : item.qty+' pcs';
-    tr.innerHTML = `<td>${item.name}</td><td class="amt">${qtyText}</td><td class="amt">${money(item.rate)}</td><td class="amt">${money(item.amount)}</td>`;
-    body.appendChild(tr);
-  });
-
-  document.getElementById('rSubtotal').textContent = money(subtotal);
-  document.getElementById('rDiscount').textContent = '- ' + money(discount);
-  document.getElementById('rDiscountRow').style.display = discount>0 ? 'flex' : 'none';
-  document.getElementById('rGrandTotal').textContent = money(grand);
-
+function renderReceipt(b){
+  document.getElementById('receipt').innerHTML = `
+    <div class="r-head"><div class="r-shop">${esc(shopInfo.name.toUpperCase())}</div>
+      <div class="r-sub">${esc(shopInfo.tagline)}</div>
+      ${shopInfo.addr?`<div class="r-sub">${esc(shopInfo.addr)}</div>`:''}</div>
+    <hr><div class="r-meta"><span>Bill No: ${b.no}</span><span>${esc(b.date)} · ${esc(b.time)}</span></div><hr>
+    ${b.items.map(i=>`<div class="r-item"><div class="r-line"><b>${esc(i.label)}</b><b>${money(i.amount)}</b></div><div class="r-qty">${esc(i.line)}</div></div>`).join('')}
+    <hr>
+    <div class="r-row"><span>Subtotal</span><span>${money(b.subtotal)}</span></div>
+    ${b.discount>0?`<div class="r-row"><span>Discount</span><span>- ${money(b.discount)}</span></div>`:''}
+    <div class="r-total"><span>TOTAL</span><span>${money(b.grand)}</span></div>
+    <hr><div class="r-foot">${esc(thanksText())}${shopInfo.phone?`<br>Contact / WhatsApp: ${esc(shopInfo.phone)}`:''}</div>`;
+}
+async function printBill(b){
+  renderReceipt(b);
+  try{ await document.fonts.ready; }catch(e){}
   window.print();
+}
+/* ---- Bill history (saved on this device) ---- */
+const LS_HISTORY = 'muk_history_v1';
+let histFilter = 'today';
+function loadHistory(){ const h = lsGet(LS_HISTORY); return Array.isArray(h) ? h : []; }
+function saveBill(b, via){
+  const h = loadHistory(), i = h.findIndex(x=>x.no===b.no), old = i>=0 ? h[i] : null;
+  const rec = {no:b.no, ts:old?old.ts:Date.now(), date:old?old.date:b.date, time:old?old.time:b.time, items:b.items, subtotal:b.subtotal, discount:b.discount, grand:b.grand, via:[...new Set([...(old?old.via:[]), via])]};
+  if(old) h[i] = rec; else h.unshift(rec);
+  lsSet(LS_HISTORY, h.slice(0,1000));
+}
+function renderHistory(){
+  const all = loadHistory(), today = new Date().toDateString();
+  const list = histFilter==='today' ? all.filter(x=>new Date(x.ts).toDateString()===today) : all;
+  const tot = round2(list.reduce((t,x)=>t+x.grand,0));
+  document.getElementById('histSummary').innerHTML = `<b>${list.length}</b> bill${list.length===1?'':'s'} · Total <b>${money(tot)}</b>`;
+  document.querySelectorAll('#histFilter button').forEach(b=>b.classList.toggle('active', b.dataset.f===histFilter));
+  const box = document.getElementById('histList');
+  if(!list.length){ box.innerHTML = '<div class="hist-empty">No bills here yet. Bills appear after you print or send them.</div>'; return; }
+  box.innerHTML = list.map(x=>`<details class="hist-item"><summary><span>Bill #${x.no}<small>${esc(x.date)} · ${esc(x.time)}</small></span><b>${money(x.grand)}</b></summary>
+    <div class="hist-body">${x.items.map(i=>`<div class="r-line2"><span>${esc(i.label)}<small>${esc(i.line)}</small></span><span>${money(i.amount)}</span></div>`).join('')}
+      ${x.discount>0?`<div class="r-line2"><span>Discount</span><span>- ${money(x.discount)}</span></div>`:''}
+      <div class="hist-via">${esc(x.via.join(' + '))}</div>
+      <div class="hist-actions"><button type="button" class="btn btn-primary" data-reprint="${x.no}">Print again</button><button type="button" class="btn btn-ghost" data-del="${x.no}">Delete</button></div></div></details>`).join('');
+  box.querySelectorAll('[data-reprint]').forEach(b=>b.addEventListener('click',()=>{ const r = loadHistory().find(x=>x.no===+b.dataset.reprint); if(r) printBill(r); }));
+  box.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>{
+    if(!confirm('Delete this bill from history?')) return;
+    lsSet(LS_HISTORY, loadHistory().filter(x=>x.no!==+b.dataset.del)); renderHistory();
+  }));
+}
+document.querySelectorAll('#histFilter button').forEach(b=>b.addEventListener('click',()=>{ histFilter = b.dataset.f; renderHistory(); }));
+
+document.getElementById('printBtn').addEventListener('click', ()=>{
+  if(cart.length===0){ showToast('Bill is empty', true); return; }
+  const b = buildBill();
+  saveBill(b, 'Printed');
+  printBill(b);
 });
 
 /* ===================== Share via WhatsApp (as an image) ===================== */
-function drawDashedLine(ctx, y, width, margin){
-  ctx.save();
-  ctx.strokeStyle = '#000';
-  ctx.setLineDash([4,3]);
-  ctx.beginPath();
-  ctx.moveTo(margin, y);
-  ctx.lineTo(width - margin, y);
-  ctx.stroke();
-  ctx.restore();
+function drawBill(ctx, b, width){
+  const m = 20, F = '"Noto Sans Malayalam","Courier New",monospace';
+  const line = y=>{ ctx.save(); ctx.strokeStyle='#000'; ctx.setLineDash([4,3]); ctx.beginPath(); ctx.moveTo(m,y); ctx.lineTo(width-m,y); ctx.stroke(); ctx.restore(); };
+  const txt = (t,x,y,font,align,color)=>{ ctx.font=font; ctx.textAlign=align; ctx.fillStyle=color||'#111'; ctx.fillText(t,x,y); };
+  const fit = (t,maxW,px,weight)=>{ while(px>9){ ctx.font=weight+' '+px+'px '+F; if(ctx.measureText(t).width<=maxW) break; px--; } return weight+' '+px+'px '+F; };
+  let y = m+16;
+  txt(shopInfo.name.toUpperCase(), width/2, y, fit(shopInfo.name.toUpperCase(), width-2*m, 19, 'bold'), 'center'); y+=18;
+  txt(shopInfo.tagline, width/2, y, fit(shopInfo.tagline, width-2*m, 11, '')  , 'center'); y+=15;
+  if(shopInfo.addr){ txt(shopInfo.addr, width/2, y, '12px '+F, 'center'); y+=15; }
+  y+=4; line(y); y+=18;
+  txt('Bill No: '+b.no, m, y, '12px '+F, 'left'); txt(b.date+' · '+b.time, width-m, y, '12px '+F, 'right'); y+=12; line(y); y+=22;
+  b.items.forEach(i=>{
+    const amt = money(i.amount);
+    ctx.font='bold 13px '+F; const aw = ctx.measureText(amt).width;
+    txt(i.label, m, y, fit(i.label, width-2*m-aw-10, 13, 'bold'), 'left');
+    txt(amt, width-m, y, 'bold 13px '+F, 'right'); y+=15;
+    txt(i.line, m+6, y, '11px '+F, 'left', '#555'); y+=19;
+  });
+  line(y); y+=20;
+  txt('Subtotal', m, y, '13px '+F, 'left'); txt(money(b.subtotal), width-m, y, '13px '+F, 'right'); y+=18;
+  if(b.discount>0){ txt('Discount', m, y, '13px '+F, 'left'); txt('- '+money(b.discount), width-m, y, '13px '+F, 'right'); y+=18; }
+  y+=2; line(y); y+=24;
+  txt('TOTAL', m, y, 'bold 18px '+F, 'left'); txt(money(b.grand), width-m, y, 'bold 18px '+F, 'right'); y+=30;
+  txt(thanksText(), width/2, y, fit(thanksText(), width-2*m, 12, ''), 'center'); y+=16;
+  if(shopInfo.phone){ txt('Contact / WhatsApp: '+shopInfo.phone, width/2, y, '11px '+F, 'center'); y+=16; }
+  return y;
 }
-
-function generateReceiptCanvas(){
-  const subtotal = cart.reduce((s,i)=>s+i.amount,0);
-  const discount = parseFloat(document.getElementById('discountInput').value) || 0;
-  const grand = Math.max(subtotal - discount, 0);
-  const width = 380;
-  const margin = 20;
-  const rowH = 34;
-  const headerH = shopInfo.addr && shopInfo.phone ? 92 : (shopInfo.addr || shopInfo.phone ? 74 : 56);
-  const metaH = 46;
-  const totalsH = discount>0 ? 96 : 76;
-  const footerH = 60;
-  const height = headerH + metaH + (cart.length*rowH) + totalsH + footerH + margin*2;
-
+async function generateReceiptCanvas(){
+  try{ await document.fonts.load('bold 13px "Noto Sans Malayalam"','അ'); }catch(e){}
+  const b = buildBill(), width = 380, scale = 2;
+  saveBill(b, 'WhatsApp');
+  const probe = document.createElement('canvas').getContext('2d');
+  const height = drawBill(probe, b, width) + 20;
   const canvas = document.createElement('canvas');
-  const scale = 2; // sharper image
-  canvas.width = width*scale;
-  canvas.height = height*scale;
+  canvas.width = width*scale; canvas.height = height*scale;
   const ctx = canvas.getContext('2d');
   ctx.scale(scale, scale);
-
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0,0,width,height);
-  ctx.fillStyle = '#111111';
-
-  let y = margin + 16;
-  ctx.textAlign = 'center';
-  ctx.font = 'bold 19px "Courier New", monospace';
-  ctx.fillText(shopInfo.name, width/2, y);
-  y += 20;
-  ctx.font = '12px "Courier New", monospace';
-  if(shopInfo.addr){ ctx.fillText(shopInfo.addr, width/2, y); y += 16; }
-  if(shopInfo.phone){ ctx.fillText('Ph: '+shopInfo.phone, width/2, y); y += 16; }
-  y += 6;
-  drawDashedLine(ctx, y, width, margin); y += 20;
-
-  ctx.font = '12px "Courier New", monospace';
-  ctx.textAlign = 'left';
-  ctx.fillText('Bill #' + getBillNo(), margin, y);
-  ctx.textAlign = 'right';
-  const dateStr = new Date().toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
-  ctx.fillText(dateStr, width-margin, y);
-  y += 12;
-  drawDashedLine(ctx, y, width, margin); y += 22;
-
-  cart.forEach(item=>{
-    const qtyText = item.type==='weight'
-      ? item.displayQty.toFixed(item.unit==='g'?0:3) + ' ' + (item.unit==='g'?'g':'kg') + ' @ ' + money(item.rate) + '/kg'
-      : item.qty + ' pcs @ ' + money(item.rate);
-    ctx.font = 'bold 13px "Courier New", monospace';
-    ctx.textAlign = 'left';
-    ctx.fillText(item.name, margin, y);
-    ctx.textAlign = 'right';
-    ctx.fillText(money(item.amount), width-margin, y);
-    y += 16;
-    ctx.font = '11px "Courier New", monospace';
-    ctx.fillStyle = '#555555';
-    ctx.textAlign = 'left';
-    ctx.fillText(qtyText, margin+6, y);
-    ctx.fillStyle = '#111111';
-    y += rowH - 16;
-  });
-
-  drawDashedLine(ctx, y, width, margin); y += 20;
-
-  ctx.font = '13px "Courier New", monospace';
-  ctx.textAlign = 'left';
-  ctx.fillText('Subtotal', margin, y);
-  ctx.textAlign = 'right';
-  ctx.fillText(money(subtotal), width-margin, y);
-  y += 18;
-  if(discount>0){
-    ctx.textAlign = 'left';
-    ctx.fillText('Discount', margin, y);
-    ctx.textAlign = 'right';
-    ctx.fillText('- ' + money(discount), width-margin, y);
-    y += 18;
-  }
-  y += 4;
-  drawDashedLine(ctx, y, width, margin); y += 24;
-
-  ctx.font = 'bold 18px "Courier New", monospace';
-  ctx.textAlign = 'left';
-  ctx.fillText('TOTAL', margin, y);
-  ctx.textAlign = 'right';
-  ctx.fillText(money(grand), width-margin, y);
-  y += 34;
-
-  ctx.font = '12px "Courier New", monospace';
-  ctx.textAlign = 'center';
-  ctx.fillText('Thank you, visit again!', width/2, y);
-
+  ctx.fillStyle = '#fff'; ctx.fillRect(0,0,width,height);
+  drawBill(ctx, b, width);
   return canvas;
 }
 
-document.getElementById('waShareBtn').addEventListener('click', ()=>{
-  if(cart.length===0){ showToast('Bill is empty'); return; }
-  const canvas = generateReceiptCanvas();
+document.getElementById('waShareBtn').addEventListener('click', async ()=>{
+  if(cart.length===0){ showToast('Bill is empty', true); return; }
+  const typed = document.getElementById('waPhone').value.trim();
+  if(typed !== shopInfo.phone && !savePhone(typed)) return; // validate + save any number typed but not yet saved
+  const canvas = await generateReceiptCanvas();
   canvas.toBlob(async (blob)=>{
-    if(!blob){ showToast('Could not generate bill image'); return; }
+    if(!blob){ showToast('Could not generate bill image', true); return; }
     const fileName = 'bill-' + getBillNo() + '.png';
     const file = new File([blob], fileName, {type:'image/png'});
-
     if(navigator.canShare && navigator.canShare({files:[file]})){
-      try{
-        await navigator.share({
-          files:[file],
-          title:'Bill from ' + shopInfo.name,
-          text:'Bill from ' + shopInfo.name
-        });
-      }catch(e){ /* user cancelled the share sheet */ }
+      try{ await navigator.share({files:[file], title:'Bill from '+shopInfo.name, text:'Bill from '+shopInfo.name}); }
+      catch(e){ /* user cancelled the share sheet */ }
     } else {
-      // Desktop / unsupported browsers: download the image, then open WhatsApp so it can be attached manually
       const dlUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');
-      link.href = dlUrl;
-      link.download = fileName;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      link.href = dlUrl; link.download = fileName;
+      document.body.appendChild(link); link.click(); document.body.removeChild(link);
       setTimeout(()=>URL.revokeObjectURL(dlUrl), 4000);
       showToast('Bill image downloaded — attach it in WhatsApp');
-      const rawPhone = document.getElementById('waPhone').value.trim().replace(/[^0-9]/g,'');
-      const url = rawPhone ? `https://wa.me/${rawPhone}` : `https://wa.me/`;
-      window.open(url, '_blank');
+      const digits = waDigits(shopInfo.phone);
+      window.open(digits ? `https://wa.me/${digits}` : 'https://wa.me/', '_blank', 'noopener');
     }
   }, 'image/png');
 });
@@ -934,33 +1050,39 @@ document.getElementById('waShareBtn').addEventListener('click', ()=>{
 function renderProductTable(){
   const body = document.getElementById('prodTableBody');
   body.innerHTML = '';
+  if(products.length===0){ body.innerHTML = '<tr><td colspan="7" style="color:var(--muted);text-align:center;padding:20px;">No products yet. Add one above.</td></tr>'; return; }
   products.forEach(p=>{
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td>${p.name}</td>
-      <td>${p.category}</td>
-      <td>${p.type==='weight' ? '₹/kg' : 'unit'}</td>
-      <td><input type="number" min="0" step="0.01" value="${p.price}" data-id="${p.id}" class="rate-edit"></td>
-      <td><button class="row-del" data-id="${p.id}">Delete</button></td>`;
+      <td data-label="Name"><input type="text" data-f="name" data-id="${esc(p.id)}" value="${esc(p.name)}" style="font-family:inherit;"></td>
+      <td data-label="Malayalam"><input type="text" data-f="ml" data-id="${esc(p.id)}" value="${esc(p.ml||'')}" placeholder="മലയാളം" style="font-family:inherit;"></td>
+      <td data-label="Category">${esc(p.category)}</td>
+      <td data-label="Unit">${p.type==='weight' ? 'kg' : 'unit'}</td>
+      <td data-label="Price (₹)"><input type="number" min="0" step="0.01" data-f="price" data-id="${esc(p.id)}" value="${esc(p.price)}"></td>
+      <td data-label="Stock"><input type="number" min="0" step="any" data-f="stock" data-id="${esc(p.id)}" value="${esc(p.stock==null?'':p.stock)}" placeholder="optional"></td>
+      <td data-label=""><button class="row-del" data-id="${esc(p.id)}">Delete</button></td>`;
     body.appendChild(tr);
   });
-  body.querySelectorAll('.rate-edit').forEach(inp=>{
-    inp.addEventListener('change', ()=>{
-      const prod = products.find(x=>x.id===inp.dataset.id);
-      prod.price = parseFloat(inp.value) || 0;
-      saveProducts(products);
-      renderProductGrid();
-      showToast('Rate updated');
-    });
+  body.querySelectorAll('input[data-f]').forEach(inp=>{
+    const apply = ()=>{
+      const prod = products.find(x=>x.id===inp.dataset.id); if(!prod) return false;
+      const f = inp.dataset.f, v = inp.value.trim();
+      if(f==='name'){ if(!v) return false; prod.name = v; }
+      else if(f==='ml'){ prod.ml = v; }
+      else if(f==='price'){ const n = parseFloat(v); if(!(n>=0)) return false; prod.price = n; }
+      else { prod.stock = v===''? '' : (parseFloat(v)>=0 ? parseFloat(v) : ''); }
+      saveProducts(products); renderProductGrid();
+      return true;
+    };
+    inp.addEventListener('input', apply);
+    inp.addEventListener('change', ()=>{ showToast(apply() ? 'Saved' : 'Invalid value', !apply()); });
   });
   body.querySelectorAll('.row-del').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       if(!confirm('Delete this product?')) return;
       products = products.filter(x=>x.id!==btn.dataset.id);
       saveProducts(products);
-      renderProductTable();
-      renderCatTabs();
-      renderProductGrid();
+      renderProductTable(); renderCatTabs(); renderProductGrid();
     });
   });
 }
@@ -971,43 +1093,71 @@ document.getElementById('newType').addEventListener('change', (e)=>{
 
 document.getElementById('addProdBtn').addEventListener('click', ()=>{
   const name = document.getElementById('newName').value.trim();
+  const ml = document.getElementById('newMl').value.trim();
   const type = document.getElementById('newType').value;
   const price = parseFloat(document.getElementById('newPrice').value) || 0;
   const category = document.getElementById('newCategory').value;
-  if(!name){ showToast('Enter a product name'); return; }
-  products.push({id:uid(), name, category, type, price});
+  if(!name){ showToast('Enter a product name', true); return; }
+  if(products.some(p=>p.name.toLowerCase()===name.toLowerCase())){ showToast(name+' already exists', true); return; }
+  products.push({id:uid(), name, ml, category, type, price});
   saveProducts(products);
-  document.getElementById('newName').value='';
-  document.getElementById('newPrice').value='';
-  renderProductTable();
-  renderCatTabs();
-  renderProductGrid();
+  document.getElementById('newName').value=''; document.getElementById('newMl').value=''; document.getElementById('newPrice').value='';
+  renderProductTable(); renderCatTabs(); renderProductGrid();
   showToast(name + ' added to catalog');
 });
 
 /* ===================== Shop settings ===================== */
+function applyShopHeader(){
+  document.getElementById('shopNameDisplay').textContent = shopInfo.name;
+  document.getElementById('shopSubDisplay').textContent = shopInfo.tagline;
+  document.getElementById('brandMark').textContent = shopInfo.name.split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase() || 'S';
+  document.title = shopInfo.name + ' — Billing';
+}
 function loadShopFormFields(){
   document.getElementById('setShopName').value = shopInfo.name;
+  document.getElementById('setShopTag').value = shopInfo.tagline;
   document.getElementById('setShopAddr').value = shopInfo.addr;
   document.getElementById('setShopPhone').value = shopInfo.phone;
+  document.getElementById('waPhone').value = shopInfo.phone;
 }
 document.getElementById('saveShopBtn').addEventListener('click', ()=>{
-  shopInfo = {
-    name: document.getElementById('setShopName').value.trim() || 'M Ummerkutty Store',
-    addr: document.getElementById('setShopAddr').value.trim(),
-    phone: document.getElementById('setShopPhone').value.trim(),
-  };
+  if(!savePhone(document.getElementById('setShopPhone').value)) return;
+  shopInfo.name = document.getElementById('setShopName').value.trim() || 'Umar Store';
+  shopInfo.tagline = document.getElementById('setShopTag').value.trim() || DEFAULT_TAGLINE;
+  shopInfo.addr = document.getElementById('setShopAddr').value.trim();
   saveShop(shopInfo);
-  document.getElementById('shopNameDisplay').textContent = shopInfo.name;
+  applyShopHeader();
   showToast('Shop details saved');
 });
+document.getElementById('waPhone').addEventListener('change', e=>{
+  if(savePhone(e.target.value)) showToast('Number saved');
+  else e.target.value = shopInfo.phone;
+});
+
+/* ===================== Ease-of-use helpers ===================== */
+new MutationObserver(()=>{
+  const ep = document.getElementById('entryPanel');
+  if(ep.style.display!=='none' && ep.children.length){
+    ep.scrollIntoView({block:'nearest',behavior:'smooth'});
+    const f = document.getElementById('entryWeight') || document.getElementById('entryQty');
+    if(f && matchMedia('(min-width:701px)').matches) f.focus();
+  }
+}).observe(document.getElementById('entryPanel'),{childList:true});
+function updateMiniBar(){
+  const bar = document.getElementById('miniBar');
+  bar.classList.toggle('on', cart.length>0);
+  document.getElementById('miniCount').textContent = cart.length+(cart.length===1?' item':' items');
+  document.getElementById('miniTotal').textContent = document.getElementById('grandTotalVal').textContent;
+}
+new MutationObserver(updateMiniBar).observe(document.getElementById('grandTotalVal'),{childList:true,characterData:true,subtree:true});
+document.getElementById('miniGo').addEventListener('click',()=>document.getElementById('printBtn').scrollIntoView({behavior:'smooth',block:'center'}));
 
 /* ===================== Init ===================== */
 renderCatTabs();
 renderProductGrid();
 renderCart();
 loadShopFormFields();
-document.getElementById('shopNameDisplay').textContent = shopInfo.name;
+applyShopHeader();
 </script>
 </body>
 </html>
